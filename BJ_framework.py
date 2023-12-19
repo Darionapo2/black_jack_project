@@ -22,7 +22,6 @@ class Deck:
     def __init__(self, suits = [], values = []):
         # TODO: Initialize the deck
         self.cards = [Card(suit, value) for suit in suits for value in values]
-        #pass
 
     def shuffle(self):
         # TODO: Shuffle the cards
@@ -40,19 +39,16 @@ class EnglishDeck(Deck):
         suits = ['hearts', 'diamonds', 'clubs', 'spades']
         values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
         super().__init__(suits, values)
-        pass
+        self.shuffle()
 
 class Hand:
     def __init__(self):
-        # TODO: Initialize the hand
-        pass
+        self.cards = []
 
     def add_card(self, card: Card):
-        # TODO: Add a card to the hand
-        pass
+        self.cards.append(card)
 
-    def value(self)->int:
-        # TODO: Return the total value of the hand
+    def value(self) -> int:
         pass
 
 class Player:
