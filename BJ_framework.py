@@ -7,20 +7,26 @@ class Card:
         # TODO: Initialize the attributes
         self.suit = suit
         self.value = value
-        pass
 
     def get_numeric_value(self) -> int:
         # TODO: Return the numeric value of the card
-
-        pass
+        if self.value.isnumeric():
+            return int(self.value)
+        elif self.value == 'A':
+            return 11
+        else: return 10
 
     def get_image(self):
-        # TODO: Return the path to the card's image
-        pass
+        return f'/img/{self.value}_of_{self.suit}.png'
 
 class Deck:
-    def __init__(self, suits = [], values = []):
+    def __init__(self, suits = None, values = None):
         # TODO: Initialize the deck
+        if values is None:
+            values = []
+        if suits is None:
+            suits = []
+
         self.cards = [Card(suit, value) for suit in suits for value in values]
 
     def shuffle(self):
@@ -64,7 +70,7 @@ class BlackjackGame:
         # TODO: Start a new game and deal two cards to each player
         pass
 
-    def hit(self)-> bool:
+    def hit(self) -> bool:
         # TODO: Add a card to the player's hand
         pass
 
@@ -181,6 +187,8 @@ class BlackjackGUI:
 
     def run(self):
         self.root.mainloop()
+
+
 if __name__ == "__main__":
     game_logic = BlackjackGame()
     app = BlackjackGUI(game_logic)
