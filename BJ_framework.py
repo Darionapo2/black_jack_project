@@ -49,12 +49,11 @@ class Hand:
         self.cards.append(card)
 
     def value(self) -> int:
-        pass
+        return sum([card.value for card in self.cards])
 
 class Player:
     def __init__(self, name):
-        # TODO: Initialize the player's attributes
-        pass
+        self.name = name
 
 class BlackjackGame:
     def __init__(self):
