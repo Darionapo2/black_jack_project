@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 from tkinter import PhotoImage, messagebox
 import random
@@ -17,7 +18,7 @@ class Card:
         else: return 10
 
     def get_image(self):
-        return f'/img/{self.value}_of_{self.suit}.png'
+        return f'img\\{self.value}_of_{self.suit}.png'
 
 class Deck:
     def __init__(self, suits = None, values = None):
@@ -32,9 +33,8 @@ class Deck:
     def shuffle(self):
         # TODO: Shuffle the cards
         random.shuffle(self.cards)
-        pass
 
-    def deal(self)-> Card:
+    def deal(self) -> Card:
         # TODO: Deal one card from the deck
          return self.cards.pop(0)
         
@@ -55,36 +55,67 @@ class Hand:
         self.cards.append(card)
 
     def value(self) -> int:
-        return sum([card.value for card in self.cards])
+        return sum([card.get_numeric_value() for card in self.cards])
 
 class Player:
     def __init__(self, name):
         self.name = name
+        self.hand = Hand()
 
 class BlackjackGame:
-    def __init__(self):
+    def __init__(self, player):
         # TODO: Initialize the game's attributes
-        pass
+        self.player = player
+        self.deck = EnglishDeck()
+        self.dealer = Player('dealer')
 
     def start_game(self):
         # TODO: Start a new game and deal two cards to each player
-        pass
+
+        self.player.hand.add_card(self.deck.deal())
+        self.player.hand.add_card(self.deck.deal())
+
+        self.dealer.hand.add_card(self.deck.deal())
+        self.dealer.hand.add_card(self.deck.deal())
 
     def hit(self) -> bool:
         # TODO: Add a card to the player's hand
-        pass
+
+        self.player.hand.add_card(self.deck.deal())
+
+        if self.player.hand.value() <= 21:
+            return False
+        else:
+            return True
 
     def dealer_hit(self) -> bool:
+        # standard rule --> 17 or more
         # TODO: Deal cards to the dealer based on blackjack's standard rules
-        pass
+        card = self.deck.deal()
+        self.dealer.hand.add_card(card)
+
+        if self.dealer.hand.value() > 17:
+            return False
+        else:
+            return True
 
     def determine_winner(self):
         # TODO: Determine and return the winner of the game
-        pass
+
+        if self.player.hand.value() > 21:
+            return self.dealer.name
+
+        if self.dealer.hand.value() > 21:
+            return self.player.name
+
+        if self.player.hand.value() > self.dealer.hand.value():
+            return self.player.name
+        else:
+            return self.dealer.name
 
 # The GUI code is provided, so students don't need to modify it
 class BlackjackGUI:
-    def __init__(self, game):
+    def __init__(self, game: BlackjackGame):
         self.game = game
 
         self.root = tk.Tk()
@@ -107,6 +138,7 @@ class BlackjackGUI:
         self.start_game()
 
     def start_game(self):
+
         self.game.start_game()
         self.update_interface()
 
@@ -124,6 +156,7 @@ class BlackjackGUI:
         self.end_game(self.game.determine_winner())
 
     def update_interface(self):
+
         # Remove all widgets from player, deck, and dealer frames
         for widget in self.player_frame.winfo_children():
             widget.destroy()
@@ -190,6 +223,8 @@ class BlackjackGUI:
 
 
 if __name__ == "__main__":
-    game_logic = BlackjackGame()
+    dario = Player('Dario')
+
+    game_logic = BlackjackGame(dario)
     app = BlackjackGUI(game_logic)
     app.run()
